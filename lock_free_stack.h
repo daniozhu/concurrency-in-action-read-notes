@@ -26,8 +26,8 @@ public:
         new_node->next = head.load();
 
         // if head != new_node->next, (for example, head has been modified by other thread which also pushed an new node and changed head to point to that new node)
-        // set new_node->next to the modfied head (new_node->next = head), and the function returns false, so the loop continues, now the head equals to the new_node->next,
-        //  so set head to the new_node (head = new_node).
+        // set new_node->next to the modfied head (new_node->next = head.load()), and the function returns false, so the loop continues, now the head equals to the new_node->next,
+        //  so set head to the new_node (head = new_node.load()).
         while (!head.compare_exchange_weak(new_node->next, new_node));
     }
 
